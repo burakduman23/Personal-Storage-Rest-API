@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Personal Sky Drive</title>
+</head>
+
+<body>
+    <div class="container-fluid" id="app">
+        <div class="jumbotron jumbotron-fluid text-center">
+            <h1>Welcome to your personal sky drive URCloud<sup><small>TM</small></sup></sup></h1>
+            <img src="/static/icon.png" alt="Logo" width="102" height="83">
+            <p><em>Store all your documents!</em></p>
+            <div v-if="!authenticated && !registerModal" class="form-group text-center">
+                <input class="col-4 mx-auto form-control" type="text" name="username" v-model="input.username"
+                    placeholder="Username" />
+                <input class="col-4 mx-auto form-control" type="password" name="password" v-model="input.password"
+                    placeholder="Password" />
+                <button class="col-4 btn btn-outline-success" type="button" v-on:click="login()">Login</button><br><br>
+                <button class="col-4 btn btn-outline-primary" type="button" v-on:click="showRegister()">New here? Create
+                    an
+                    account!</button>
+            </div>
+            <div v-else-if="authenticated" class="text-center">
+                <button type="button" class="btn btn-outline-danger" v-on:click="logout()">Logout</button>
+                <button type="button" class="btn btn-outline-primary" v-on:click="fetchDocuments()">Get All
+                    Documents</button><br><br><br>
+                <p><em>Upload a document!</em></p>
+                <form enctype="multipart/form-data" >
+                    <input class="col-4 mx-auto form-control" type="file" id="fileField" ref="file"
+                        accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.csv,.xls,.xlsx,.ppt,.pptx,.odp" v-on:change="handleUpload()">
+                    <button type="button" class="btn btn-outline-success" v-on:click="submitFile()">Upload</button><br><br>
+
+                    <button type="button" class="btn btn-outline-danger" v-on:click="deleteUser()">Delete User</button>
+                </form>
+            </div>
+            <div v-else-if="registerModal" class="text-center">
+                <input class="col-4 mx-auto form-control" type="text" name="firstName" v-model="registerInput.firstName"
+                    placeholder="First Name" />
+                <input class="col-4 mx-auto form-control" type="text" name="lastName" v-model="registerInput.lastName"
+                    placeholder="Last Name" />
+                <input class="col-4 mx-auto form-control" type="text" name="email" v-model="registerInput.email"
+                    placeholder="Email" />
+                <input class="col-4 mx-auto form-control" type="text" name="username" v-model="registerInput.username"
+                    placeholder="Username" />
+                <input class="col-4 mx-auto form-control" type="password" name="password"
+                    v-model="registerInput.password" placeholder="Password" />
+
+                <button class="col-4 btn btn-outline-success" type="button" v-on:click="register()">Register</button>
+            </div>
+        </div>
+
+        <div v-if="authenticated">
+            <div v-if="documents != null" id="docList">
+                <ul class="list-group">
+                    <div v-for="doc in documents">
+                        <li class="list-group-item col-7 mx-auto">
+                            <div class="d-flex w-100 justify-content-between">
+                                {{doc.doc_name}}
+                                <div class="btn-group-xs">
+                                    <button class="utilityBtn text-danger"
+                                        v-on:click="deleteDocument(doc.doc_name)">x</button>
+                                    <button class="utilityBtn text-success"
+                                        v-on:click="downloadDocument(doc.doc_name)">↓</button>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/static/appHandle.js"></script>
+
+        <link rel="stylesheet" href="/static/formCSS.css" />
+</body>
+
+</html>

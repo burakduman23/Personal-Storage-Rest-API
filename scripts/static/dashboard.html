@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login Page</title>
+  <link href="/static/formCSS.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+  <img src="/static/icon.png" alt="Logo" width="102" height="83">
+  <h1>User Dashboard</h1>
+  <div class="container-fluid" id="app">
+
+    <div class="form-group text-center">
+      <button class="col-4 btn btn-outline-success" type="button" v-on:click="getDocuments()">Get All
+        Documents</button><br>
+      <hr width="40%" color = "#0064bd" style = "height:5px ; border-radius:10px"/>
+      <input class="col-4 mx-auto form-control" type="text" name="docname" v-model="input.docname"
+        placeholder="Document name" />
+      <div class="form-group text-center">
+        <button class="btn btn-primary" type="button" v-on:click="getDocument()">Get Document</button>
+        <button class="btn btn-danger" type="button" v-on:click="deleteDocument()">Delete Document </button>
+      </div>
+      <hr width="40%" color = "#0064bd" style = "height:5px ; border-radius:10px"/>
+      <button class="col-4 btn btn-outline-danger" type="button" v-on:click="deleteUser()">Delete User</button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/static/loginHandle.js"></script>
+</body>
+
+</html>

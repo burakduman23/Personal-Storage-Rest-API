@@ -1,0 +1,258 @@
+openapi: 3.0.0
+servers: 
+  - url: https://cs3103.cs.unb.ca/bduman/Project
+info:
+  description: An API to manage a sky drive for your documents.
+  version: '1.0'
+  title: Document Drive API
+  contact:
+    email: "bduman@unb.ca" 
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: non-logged-in users
+    description: Users that are not logged in
+  - name: logged-in users
+    description: Users who are logged in and able to manipulate their documents in the database
+paths:
+  /documents:
+    get:
+      tags:
+        - logged-in users
+      summary: returns all the documents of the user
+      operationId: getDocuments
+      description: |
+        Lists all the documents of the user
+      parameters:
+        - name: user_name
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successfully returned all the documents of the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+            application/xml:
+              schema:
+                xml:
+                  name: 'schools'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+        '400':
+          description: could not fetch documents 
+    post:
+      tags:
+        - logged-in users
+      summary: Adds a document to the database
+      operationId: addDocument
+      description: Adds a document to the database system
+      parameters:
+        - name: user_name
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        description: Document to add
+    delete:
+      tags:
+        - logged-in users
+      summary: Delete a single document from the database
+      operationId: deleteDocument
+      description: deletes document from the database
+      parameters:
+        - name: doc_name
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+
+  /login:
+    post:
+      tags:
+        - non-logged-in users
+      summary: allows the user to log in
+      description: Allows users to log in if they have an account already
+      parameters:
+        - name: user_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully Logged In
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid request
+        '404':
+          description: User not found
+      
+  /register:
+    post:
+      tags:
+        - non-logged-in users
+      summary: Adds a user to the database
+      operationId: addUser
+      description: Adds a user to the database system
+      parameters:
+        - name : firstName
+          in: header
+          required : true
+          schema:
+            type: string
+        - name : lastName
+          in: header
+          required : true
+          schema:
+            type: string
+        - name : email
+          in: header
+          required : true
+          schema:
+            type: email
+            
+        - name : username
+          in: header
+          required : true
+          schema:
+            type: string
+            
+        - name : password
+          in: header
+          required : true
+          schema:
+            type: string
+            
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: an existing item already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User to add
+    
+  /user:
+    delete:
+      tags:
+        - logged-in users
+      summary: deletes the user record
+      description: Delete a user from the database
+      parameters:
+        - name: user_name
+          in: header
+          required: true
+          schema:
+            type: string
+        
+        - name: password
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully deleted the user
+        '404':
+          description: User not found
+    post:
+      tags:
+        - logged-in users
+      summary: downloads the specified document owned by the user
+      description: allows the user to download a document
+      parameters:
+        - name: doc_name
+          in : header
+          required: true
+          schema: 
+            type: string
+      responses:
+        '400':
+          description: Request not JSON
+        '403':
+          description: Failure
+      
+  
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - user_name
+        - name
+        - last_name
+        - password
+        - e-mail
+      properties:
+        user_name:
+          type: string
+          example: bduman
+        name:
+          type: string
+          example: Burak
+        last_name:
+          type: string
+          example: Duman
+        password:
+          type: string
+          example: Very_Strong_Password!2023
+        e-mail:
+          type: string
+          example: bduman@unb.ca
+          
+    Document:
+      type: object
+      required:
+        - name
+        - owner
+      properties:
+        docId:
+          type: integer
+          example: 6
+        name:
+          type: string
+          example: CS3103_Assignment5.html
+        owner:
+          type: string
+          example: bduman
+     

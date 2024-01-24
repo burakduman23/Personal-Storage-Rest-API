@@ -1,0 +1,12 @@
+#!/bin/bash
+# Read username and password
+read -r -p "first name: " fname
+read -r -p "last name: " lname
+read -r -p "e-mail: " email
+read -r -p "username: " username
+read -r -s -p "password: " password
+
+
+curl -i -H "Content-Type: application/json" -X POST -d \
+   '{"firstName": "'$fname'", "lastName" : "'$lname'", "email" : "'$email'", "username": "'$username'", "password": "'$password'"}' \
+    -c cookie-jar -k <endpoint>
